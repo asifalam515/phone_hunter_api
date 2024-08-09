@@ -36,8 +36,8 @@ const displayPhone = (phones, isShowAll) => {
   <div class="card-body">
     <h2 class="card-title">${phone.phone_name}</h2>
     <p>If a dog chews shoes whose shoes does he choose?</p>
-    <div class="card-actions justify-end">
-      <button class="btn btn-primary">Buy Now</button>
+    <div class="card-actions justify-center">
+      <button onclick="handleShowDetails('${phone.slug}')" class="btn btn-primary ">Show Details</button>
     </div>
   </div>`;
     phoneContainer.appendChild(phoneCard);
@@ -66,4 +66,28 @@ const toggleLoadingSpinner = (isLoading) => {
 // handle show all btn
 const handleShowAll = () => {
   handleSearchBtn(true);
+};
+
+// show phone details
+const handleShowDetails = async (id) => {
+  const res = await fetch(
+    `https://openapi.programming-hero.com/api/phone/${id}`
+  );
+  const data = await res.json();
+  const phone = data.data;
+  showPhoneDetails(phone);
+};
+
+// load details single phone data
+const showPhoneDetails = (phone) => {
+  console.log(phone);
+  const phoneName = document.getElementById("show-detail-phone-name");
+  phoneName.innerText = phone.name;
+  const showDetailContainer = document.getElementById("show-detail-container");
+  showDetailContainer.innerHTML = `
+  <img src="${phone.image}">
+  <p> <span> Storage:${phone?.mainFeatures.storage} </span> </p>
+  
+  `;
+  show_details_modal.showModal();
 };
